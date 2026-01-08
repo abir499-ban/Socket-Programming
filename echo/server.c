@@ -9,7 +9,7 @@ void chat(int newSocket)
     char buffer[500];
     while (1)
     {
-        ssize_t n = read(newSocket, buffer, sizeof(buffer));
+        ssize_t n = read(newSocket, buffer, sizeof(buffer)-1);
         if (n == 0)
         {
             printf("Client closed connection\n");
@@ -21,12 +21,14 @@ void chat(int newSocket)
             printf("Error while reading");
             break;
         }
+        printf("data received:%s\n" , buffer);
         write(newSocket, buffer, n);
     }
 }
 
 int main()
 {
+    printf("Server://\n");
     struct sockaddr_in serveraddr, clientaddr;
 
     int sock_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -39,7 +41,7 @@ int main()
 
     memset(&serveraddr, 0, sizeof(serveraddr));
     serveraddr.sin_family = AF_INET;
-    serveraddr.sin_port = htons(5001);
+    serveraddr.sin_port = htons(9099);
     serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
 
     if (bind(sock_fd, (struct sockaddr *)&serveraddr, sizeof(serveraddr)) < 0)
