@@ -9,6 +9,7 @@ void chat(int newSocket)
     char buffer[500];
     while (1)
     {
+        memset(buffer ,0 ,sizeof(buffer));
         ssize_t n = read(newSocket, buffer, sizeof(buffer)-1);
         if (n == 0)
         {
