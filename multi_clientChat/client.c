@@ -14,28 +14,29 @@ void chat(int sockFd){
         fgets(buffer , sizeof(buffer) - 1 , stdin);
 
 
-        ssize_t n = sizeof(buffer);
-        buffer[strcspn(buffer , '\n')] = '\0';
+        buffer[strcspn(buffer , "\n")] = '\0';
 
         if(strcmp(buffer , "exit") == 0){
             break;
         }
-
+        
+        ssize_t n = strlen(buffer);
         write(sockFd , buffer , n);
 
         ssize_t r = read(sockFd , buffer , sizeof(buffer) - 1);
         if(r <= 0){
-            printf('Server closed\n');
+            printf("Server closed\n");
+            break;
         }
         
         buffer[r] = '\0';
-        print('Received string: %s\n' , buffer);
+        printf("Received string: %s\n" , buffer);
 
     }
 }
 
 int main(){
-    struct sockaddr_in serverAddr , clientAddr;
+    struct sockaddr_in serverAddr ;
     
     int sockFd = socket(AF_INET , SOCK_STREAM , 0);
 
